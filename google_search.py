@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 from bs4 import BeautifulSoup
 
 #searching the given query
@@ -11,18 +12,16 @@ def search_query(query):
         title=[]
         short_content=[]
         content=[]
-        for i in range(0,10):
+        for i in range(0,5):
             url.append(json_value['results'][i]['url'])
-            title.append(json_value['results'][i]['title'])
-            short_content.append(json_value['results'][i]['content'])
             try:
                 print("Search link ",url[i])
-                response=requests.get(url[i])
+                response=requests.get(url[i],timeout=5)
                 response.raise_for_status()
                 response=BeautifulSoup(response.text,'html.parser').get_text()
+                response= re.sub(r"\n+", "\n", response)
                 content.append(response.strip())
             except Exception as e:
                 print(e)
-        return(url,title,short_content,content)
+        return(content)
 
-search_query('why sky is blue')
