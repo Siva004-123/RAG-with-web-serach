@@ -1,7 +1,10 @@
 from langchain_community.embeddings import SentenceTransformerEmbeddings
+import warnings
 import numpy as np
 import faiss
 from google_search import search_query
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 def embed(query):
     content=search_query(query)
@@ -16,7 +19,7 @@ def embed(query):
 
     k = 2  # Number of nearest neighbors to retrieve
     distances, indices = index.search(query_vector_np, k)
-    result_content=[]
+    result_content=""
     for i in indices[0]:
-        result_content.append(content[i])
+        result_content=result_content+content[i]
     return result_content
